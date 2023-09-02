@@ -1,130 +1,167 @@
-import React from 'react';
+import React, { useState } from "react";
 import {
   SafeAreaView,
   View,
   Text,
   TextInput,
   TouchableOpacity,
-} from 'react-native';
+  ActivityIndicator,
+} from "react-native";
 
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-import LoginSVG from '../assets/images/misc/login.svg';
-import GoogleSVG from '../assets/images/misc/google.svg';
-import FacebookSVG from '../assets/images/misc/facebook.svg';
-import TwitterSVG from '../assets/images/misc/twitter.svg';
+import LoginSVG from "../assets/images/misc/login.svg";
+import GoogleSVG from "../assets/images/misc/google.svg";
+import FacebookSVG from "../assets/images/misc/facebook.svg";
+import TwitterSVG from "../assets/images/misc/twitter.svg";
 
-import CustomButton from '../components/CustomButton';
-import InputField from '../components/InputField';
+import CustomButton from "../components/CustomButton";
+import InputField from "../components/InputField";
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoading(true);
+
+
+    setTimeout(() => {
+      setIsLoading(false);
+      navigation.navigate("Job");
+    }, 2000);
+  };
   return (
-    <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
-      <View style={{paddingHorizontal: 25}}>
-        <View style={{alignItems: 'center'}}>
+    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
+      <View style={{ paddingHorizontal: 25 }}>
+        <View style={{ alignItems: "center" }}>
           <LoginSVG
             height={300}
             width={300}
-            style={{transform: [{rotate: '-5deg'}]}}
+            style={{ transform: [{ rotate: "-5deg" }] }}
           />
         </View>
 
         <Text
           style={{
-            fontFamily: 'Roboto-Medium',
+            fontFamily: "Roboto-Medium",
             fontSize: 28,
-            fontWeight: '500',
-            color: '#333',
+            fontWeight: "500",
+            color: "#333",
             marginBottom: 30,
-          }}>
+          }}
+        >
           Login
         </Text>
 
         <InputField
-          label={'Email'}
+          label={"Email"}
           icon={
             <MaterialIcons
-            name="alternate-email"
-            size={20}
-            color="#666"
-            style={{marginRight: 5}}
-          />
+              name="alternate-email"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
           }
           keyboardType="email-address"
         />
 
-<InputField
-          label={'Password'}
+        <InputField
+          label={"Password"}
           icon={
             <Ionicons
-            name="ios-lock-closed-outline"
-            size={20}
-            color="#666"
-            style={{marginRight: 5}}
-          />
+              name="ios-lock-closed-outline"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
           }
           inputType="password"
           fieldButtonLabel={"Forgot?"}
           fieldButtonFunction={() => {}}
         />
-        
-        <CustomButton label={"Login"} onPress={() => navigation.navigate('Job')} />
 
-        <Text style={{textAlign: 'center', color: '#666', marginBottom: 30}}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: isLoading ? "#ccc" : "#1870F0",
+            borderRadius: 10,
+            paddingVertical: 14,
+            alignItems: "center",
+            marginBottom: 20,
+          }}
+          onPress={handleLogin}
+          disabled={isLoading} // Menonaktifkan tombol saat loading berlangsung
+        >
+          {isLoading ? (
+            <ActivityIndicator color="#1870F0" size="small" />
+          ) : (
+            <Text style={{ color: "white", fontWeight: "bold" }}>Login</Text>
+          )}
+        </TouchableOpacity>
+
+        <Text style={{ textAlign: "center", color: "#666", marginBottom: 30 }}>
           Login with
         </Text>
 
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            flexDirection: "row",
+            justifyContent: "space-between",
             marginBottom: 30,
-          }}>
+          }}
+        >
           <TouchableOpacity
             onPress={() => {}}
             style={{
-              borderColor: '#ddd',
+              borderColor: "#ddd",
               borderWidth: 2,
               borderRadius: 10,
               paddingHorizontal: 30,
               paddingVertical: 10,
-            }}>
+            }}
+          >
             <GoogleSVG height={24} width={24} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {}}
             style={{
-              borderColor: '#ddd',
+              borderColor: "#ddd",
               borderWidth: 2,
               borderRadius: 10,
               paddingHorizontal: 30,
               paddingVertical: 10,
-            }}>
+            }}
+          >
             <FacebookSVG height={24} width={24} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {}}
             style={{
-              borderColor: '#ddd',
+              borderColor: "#ddd",
               borderWidth: 2,
               borderRadius: 10,
               paddingHorizontal: 30,
               paddingVertical: 10,
-            }}>
+            }}
+          >
             <TwitterSVG height={24} width={24} />
           </TouchableOpacity>
         </View>
 
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
+            flexDirection: "row",
+            justifyContent: "center",
             marginBottom: 30,
-          }}>
+          }}
+        >
           <Text>Need an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <Text style={{color: '#1870F0', fontWeight: '700'}}> Register</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+            <Text style={{ color: "#1870F0", fontWeight: "700" }}>
+              {" "}
+              Register
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

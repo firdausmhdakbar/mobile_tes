@@ -6,7 +6,6 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
 import CartScreen from '../screens/CartScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
-import GameDetailsScreen from '../screens/GameDetailsScreen';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';

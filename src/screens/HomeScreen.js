@@ -43,7 +43,7 @@ export default function HomeScreen({navigation}) {
           </Text>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <ImageBackground
-              source={require('../assets/images/user-profile.jpg')}
+              // source={require('../assets/images/user-profile.jpg')}
               style={{width: 35, height: 35}}
               imageStyle={{borderRadius: 25}}
             />

@@ -1,8 +1,8 @@
 import React from 'react'
-import { SafeAreaView, View, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, Text, TouchableOpacity, Image } from 'react-native';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Gaming from '../assets/images/misc/Astra.svg';
+
 
 const OnboardingScreen = ({navigation}) => {
   return (
@@ -25,11 +25,10 @@ const OnboardingScreen = ({navigation}) => {
         </Text>
       </View>
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Gaming
-          width={300}
-          height={300}
-          // style={{transform: [{rotate: '-15deg'}]}}
-        />
+      <Image
+            source={require('../assets/images/misc/dbo-logo.png')}
+            style={{height: 150, width: 350}}
+          />
       </View>
       <TouchableOpacity
         style={{

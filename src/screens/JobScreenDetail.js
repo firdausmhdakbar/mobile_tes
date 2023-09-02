@@ -82,19 +82,7 @@ export default class App extends Component {
     return (
       <View>
         <View>
-          {/* <Text style={{fontWeight: 'bold'}}>TOP</Text>
-           <Text>{item.id}</Text>
-           <Text>{item.type}</Text>
-           <Text>{item.url}</Text>
-           <Text>{item.created_at}</Text>
-           <Text>{item.company}</Text>
-           <Text>{item.company_url}</Text>
-           <Text>{item.location}</Text>
-           <Text>{item.title}</Text>
-           <Text>{item.description}</Text>
-           <Text>{item.how_to_apply}</Text>
-           <Text>{item.company_logo}</Text>
-           <Text></Text> */}
+
            <Text style={{padding: 10, textAlign:'center'}}></Text>
         </View>
         <Image
@@ -105,7 +93,7 @@ export default class App extends Component {
               height: 40,
               zIndex: 1,
             }}
-            source={{uri: 'https://www.ag-it.com/img/logo.png'}}
+           
           />
         <Card containerStyle={{borderRadius:10, backgroundColor:'#fafafa'}}>
             <Card.Title

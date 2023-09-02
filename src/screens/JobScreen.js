@@ -1,25 +1,67 @@
-import {Text, View, FlatList, StyleSheet, Image, ActivityIndicator, TouchableOpacity} from 'react-native';
+import {Text, View, FlatList, StyleSheet, Image, ActivityIndicator, TouchableOpacity, Dimensions} from 'react-native';
 import React, {Component} from 'react';
 import customData from './positions.json';
 
 
 const dataJson = customData;
 
-const styles = StyleSheet.create({
-  listContainer: {
-    flexDirection: 'row',
+const { width } = Dimensions.get('window');
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+    padding: 16,
+  },
+  cardContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginVertical: 10,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  cardImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+  cardTitle: {
+    fontSize: width > 360 ? 18 : 16,
+    marginLeft: 12,
+    color: '#1870F0',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
+  },
+  cardDetails: {
+    paddingHorizontal: 10,
+    marginTop: 10,
+  },
+  textDetail: {
+    fontSize: width > 360 ? 14 : 12,
+    color: 'grey',
+    fontFamily: 'Roboto',
+  },
+  headerContainer: {
+    backgroundColor: '#1870F0', 
     paddingVertical: 16,
     alignItems: 'center',
   },
-  textDetail: {
-    fontSize: 12,
-    color: 'grey',
-  },
-  loaderStyle: {
-    marginVertical: 16,
-    alignItems: "center",
-  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white', // Warna teks header
+  }   
 });
 
 export default class App extends Component {
@@ -27,11 +69,23 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataJson: dataJson,
+      dataJson: dataJson.slice(0, 10),
       isLoading: false,
-      currentPage: 1
+      currentPage: 1,
+      isFetchingMore: false,
+      searchText: '', 
+      filteredData: dataJson.slice(0, 10), 
     };
   }
+  
+  handleSearch = () => {
+    const { searchText } = this.state;
+   
+    const filteredData = dataJson.filter(item =>
+      item.productName.toLowerCase().includes(searchText.toLowerCase())
+    );
+    this.setState({ filteredData });
+  };
   
   getData(){
     this.setState({
@@ -44,28 +98,36 @@ export default class App extends Component {
         })
       }, 3000);
     } 
-
-    // axios.get(``)
-    //   .then(res => {
-    //     //setUsers(res.data.results);
-    //     setUsers([...users, ...res.data.results]);
-    //     setIsLoading(false);
-    //   });
   };
 
   renderLoading() {
     return (
-      !this.state.isLoading ?
+      this.state.isLoading ? (
         <View style={styles.loaderStyle}>
           <ActivityIndicator size="large" color="#aaa" />
-        </View> : null
+        </View>
+      ) : null
     );
   }
 
   loadMoreItem() {
-    this.setState({
-      currentPage : this.state.currentPage + 1
-    })
+    if (!this.state.isFetchingMore) {
+      this.setState({
+        isFetchingMore: true,
+      });
+
+      setTimeout(() => {
+        const startIndex = this.state.currentPage * 10;
+        const endIndex = startIndex + 10;
+        const newData = dataJson.slice(startIndex, endIndex);
+
+        this.setState(prevState => ({
+          dataJson: [...prevState.dataJson, ...newData],
+          currentPage: prevState.currentPage + 1,
+          isFetchingMore: false,
+        }));
+      }, 3000);
+    }
   }
 
   componentDidMount() {
@@ -76,67 +138,48 @@ export default class App extends Component {
   separator = () => <View style={{height: 10, backgroundColor: '#eceff1'}} />;
 
 
-  itemRender = ({item}) => {
+  itemRender = ({ item }) => {
     return (
-      <View>
-        <View>
-          {/* <Text style={{fontWeight: 'bold'}}>TOP</Text>
-           <Text>{item.id}</Text>
-           <Text>{item.type}</Text>
-           <Text>{item.url}</Text>
-           <Text>{item.created_at}</Text>
-           <Text>{item.company}</Text>
-           <Text>{item.company_url}</Text>
-           <Text>{item.location}</Text>
-           <Text>{item.title}</Text>
-           <Text>{item.description}</Text>
-           <Text>{item.how_to_apply}</Text>
-           <Text>{item.company_logo}</Text>
-           <Text></Text> */}
-        </View>
-        <TouchableOpacity
-         onPress={() => {
-          // if (item.id == '7638eee4-4e75-4c06-a920-ea7619a311b5') {
-            this.props.navigation.navigate('JobDetail')
-          // }
+      <TouchableOpacity
+        onPress={() => {
+          // this.props.navigation.navigate('JobDetail');
         }}
-        // onPress={() => {
-        
-        // }
-
-        // }
-        >
-        <View style={{padding: 15, flexDirection: 'row', alignItems: 'center'}}>
-          <Image source={{uri: item.new_logo}} style={{width: 60, height: 60}} />
-          <Text style={{fontSize: 14, marginLeft: 7, color:'#1870F0', fontWeight:'bold', flex: 1}}> Job {item.title}</Text>
+      >
+        <View style={styles.cardContainer}>
+          <View style={styles.cardHeader}>
+            <Image source={{ uri: item.new_logo }} style={styles.cardImage} />
+            <Text style={styles.cardTitle}>{item.productName}</Text>
+          </View>
+          <View style={styles.cardDetails}>
+            <Text style={styles.textDetail}>{item.quantity} Item</Text>
+            <Text style={styles.textDetail}>$ {item.totalPrice}</Text>
+          </View>
         </View>
-
-        <View style={{paddingHorizontal: 10, flex: 1}}>
-          <Text style={styles.textDetail}>{item.company}</Text>
-          <Text style={styles.textDetail}>{item.created_at}</Text>
-        </View>
-        </TouchableOpacity>
-        <Text></Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
   render() {
     return (
-      <View>
-        {/* mapping dengan data json
-        {this.state.dataJson.map(x => (
-          <View>
-            <Text style={{textAlign: 'center'}}>{x.company}</Text>
-          </View>
-        ))} */}
-
-        <FlatList 
-        data={this.state.dataJson} 
-        renderItem={this.itemRender}
-        ItemSeparatorComponent={this.separator}
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>List Order</Text>
+        </View>
+        <FlatList
+          data={this.state.dataJson}
+          renderItem={this.itemRender}
+          ItemSeparatorComponent={this.separator}
+          ListFooterComponent={() => (
+            this.state.isFetchingMore ? (
+              <View style={styles.paginationLoader}>
+                <ActivityIndicator size="large" color="#1870F0" />
+              </View>
+            ) : null
+          )}
+          onEndReached={this.loadMoreItem.bind(this)}
+          onEndReachedThreshold={0.1}
         />
       </View>
-    );
+    )
   }
 }
